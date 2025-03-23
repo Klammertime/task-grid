@@ -1,0 +1,12 @@
+{
+  "name": "data-grid",
+  "packageManager": "yarn@4.7.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "turbo": "^2.4.4"
+  }
+}
