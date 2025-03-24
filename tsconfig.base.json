@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "lib": [
+            "DOM",
+            "ESNext"
+        ],
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "strict": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react-jsx",
+        "baseUrl": ".",
+        "paths": {
+            "grid-core": [
+                "packages/grid-core/src"
+            ],
+            "ui": [
+                "packages/ui/src"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

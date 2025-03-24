@@ -1,5 +1,5 @@
 {
-  "name": "grid-core",
+  "name": "server",
   "packageManager": "yarn@4.7.0",
   "main": "index.ts",
   "types": "index.ts",
