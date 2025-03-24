@@ -1,7 +1,7 @@
 {
   "name": "ui",
   "packageManager": "yarn@4.7.0",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "private": true
 }

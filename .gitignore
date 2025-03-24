@@ -17,4 +17,7 @@ node_modules
 .pnp.*
 
 # Ignore the credentials file
-.git-credentials
+.git-credentials.tsbuildcache
+
+# Ignore TS incremental build cache
+.tsbuildcache/
