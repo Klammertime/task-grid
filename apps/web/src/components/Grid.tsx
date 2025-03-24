@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { ColumnDef, RowData } from 'grid-core';
+import { fieldRegistry } from 'grid-core';
 
 interface GridProps {
     columns: ColumnDef[];
@@ -74,17 +75,27 @@ export const Grid = ({
                             )}
                             {columns.map(col => (
                                 <td key={col.id}>
-                                    {col.renderEditor ? (
-                                        col.renderEditor({
-                                            value: row.values[col.id],
-                                            onChange: newVal => handleCellChange(row.id, col.id, newVal),
-                                            onCancel: () => { } // optional cancel hook
-                                        })
-                                    ) : col.renderCell ? (
-                                        col.renderCell(row.values[col.id], row)
-                                    ) : (
-                                        String(row.values[col.id] ?? '')
-                                    )}
+                                    {(() => {
+                                        const value = row.values[col.id];
+                                        const fieldConfig = fieldRegistry[col.fieldType] ?? {};
+                                        const renderEditor = col.renderEditor || fieldConfig.renderEditor;
+                                        const renderCell = col.renderCell || fieldConfig.renderCell;
+
+                                        return renderEditor ? (
+                                            renderEditor({
+                                                value,
+                                                column: col,
+                                                row,
+                                                onChange: newVal => handleCellChange(row.id, col.id, newVal),
+                                                onCancel: () => { },
+                                            })
+
+                                        ) : renderCell ? (
+                                            renderCell(value, row)
+                                        ) : (
+                                            String(value ?? '')
+                                        );
+                                    })()}
                                 </td>
                             ))}
                         </tr>

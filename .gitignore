@@ -21,3 +21,7 @@ node_modules
 
 # Ignore TS incremental build cache
 .tsbuildcache/
+
+# Turborepo
+.turbo/
+.turbo/**

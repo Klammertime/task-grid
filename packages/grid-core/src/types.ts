@@ -8,14 +8,15 @@ export type RowData = {
 export interface ColumnDef {
     id: string;
     label: string;
-    fieldType?: string;
+    fieldType: string;
 
     // Cell display logic
-    renderCell?: (value: any, row: RowData) => ReactNode;
+    renderCell?: (value: any, row: RowData, column: ColumnDef) => ReactNode;
 
-    // Optional inline editor
     renderEditor?: (opts: {
         value: any;
+        column: ColumnDef;
+        row: RowData;
         onChange: (value: any) => void;
         onCancel?: () => void;
     }) => ReactNode;
