@@ -1,39 +1,33 @@
 import React from 'react';
 import './UserAvatar.css';
 
-type User = {
+interface User {
     id: string;
     name: string;
-    avatarUrl?: string;
-};
-
-interface UserAvatarProps {
-    value: User[]; // array of users
+    avatarUrl: string;
 }
 
-const MAX_DISPLAY = 2;
+interface Props {
+    user?: User;            // allow undefined for safety
+    size?: number;          // optional size prop
+}
 
-const UserAvatar: React.FC<UserAvatarProps> = ({ value }) => {
-    if (!value || value.length === 0) return null;
-
-    const visible = value.slice(0, MAX_DISPLAY);
-    const overflow = value.length - visible.length;
+const UserAvatar: React.FC<Props> = ({ user, size = 32 }) => {
+    if (!user) return null; // 🔐 guard against undefined
 
     return (
-        <div className="user-avatar-stack" title={value.map(u => u.name).join(', ')}>
-            {visible.map(user => (
-                <div key={user.id} className="avatar">
-                    {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={user.name} />
-                    ) : (
-                        <div className="avatar-placeholder">{user.name[0]}</div>
-                    )}
-                </div>
-            ))}
-            {overflow > 0 && (
-                <div className="avatar-overflow">+{overflow}</div>
-            )}
-        </div>
+        <img
+            className="user-avatar"
+            src={user.avatarUrl}
+            alt={user.name}
+            title={user.name}
+            style={{
+                width: size,
+                height: size,
+                borderRadius: '50%',
+                objectFit: 'cover',
+            }}
+        />
     );
 };
 

@@ -1,0 +1,41 @@
+.user-select {
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+
+.user-search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+.user-dropdown {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.user-option:hover {
+    background: #f0f0f0;
+}
+
+.user-option.selected {
+    background: #e6f3ff;
+}

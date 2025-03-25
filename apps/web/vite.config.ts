@@ -7,6 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       'grid-core': path.resolve(__dirname, '../../packages/grid-core/src'),
+      'ui': path.resolve(__dirname, '../../packages/ui/src'),
     },
   },
   server: {

@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import type { ColumnDef, RowData } from './types';
 
-import UserAvatar from '../../ui/src/UserAvatar';
 import UserSelect from '../../ui/src/UserSelect';
+
+import UserCell from '../../../apps/web/src/renderers/UserCell';
+import UserEditor from '../../../apps/web/src/renderers/UserEditor';
 
 
 export type FieldType = 'user' | 'text' | 'number' | string;
@@ -22,10 +24,10 @@ export type FieldRenderer = {
 
 export const fieldRegistry: Record<FieldType, FieldRenderer> = {
     user: {
-        renderCell: (value, row, column) => <UserAvatar value={value} />,
+        renderCell: (value, row, column) => <UserCell value={value} row={row} column={column} />,
         renderEditor: ({ value, onChange, onCancel }) => (
-            <UserSelect value={value} onChange={onChange} onCancel={onCancel} />
-        )
+            <UserEditor value={value} onChange={onChange} onCancel={onCancel} />
+        ),
     },
     text: {
         renderEditor: ({ value, onChange }) => (

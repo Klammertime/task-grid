@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import './UserAvatar.css';
+import { UserAvatar } from 'ui';
+import './UserSelect.css';
 
 interface User {
     id: string;
     name: string;
-    email: string;
     avatarUrl: string;
+    email?: string;
 }
 
 interface UserSelectProps {
-    value: string[]; // list of user IDs
+    value: string[]; // selected user IDs
     onChange: (value: string[]) => void;
     onCancel?: () => void;
 }
 
-const UserSelect: React.FC<UserSelectProps> = ({ value, onChange, onCancel }) => {
+const UserSelect: React.FC<UserSelectProps> = ({ value, onChange }) => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -26,13 +26,10 @@ const UserSelect: React.FC<UserSelectProps> = ({ value, onChange, onCancel }) =>
                 if (!res.ok) throw new Error('Failed to fetch users');
                 const data = await res.json();
                 setUsers(data);
-            } catch (err: any) {
-                setError(err.message || 'Unknown error');
-            } finally {
-                setLoading(false);
+            } catch (err) {
+                console.error(err);
             }
         };
-
         fetchUsers();
     }, []);
 
@@ -44,23 +41,30 @@ const UserSelect: React.FC<UserSelectProps> = ({ value, onChange, onCancel }) =>
         }
     };
 
-    if (loading) return <div>Loading users...</div>;
-    if (error) return <div className="error">Error: {error}</div>;
+    const filteredUsers = users.filter(u =>
+        u.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="user-select">
-            {users.map(user => (
-                <div
-                    key={user.id}
-                    className={`user-option ${value.includes(user.id) ? 'selected' : ''}`}
-                    onClick={() => toggleUser(user.id)}
-                >
-                    <img src={user.avatarUrl} alt={user.name} />
-                    <span>{user.name}</span>
-                </div>
-            ))}
-            <div className="actions">
-                <button onClick={onCancel}>Cancel</button>
+            <input
+                type="text"
+                placeholder="Search users..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                className="user-search-input"
+            />
+            <div className="user-dropdown">
+                {filteredUsers.map(user => (
+                    <div
+                        key={user.id}
+                        className={`user-option ${value.includes(user.id) ? 'selected' : ''}`}
+                        onClick={() => toggleUser(user.id)}
+                    >
+                        <UserAvatar user={user} />
+                        <span>{user.name}</span>
+                    </div>
+                ))}
             </div>
         </div>
     );

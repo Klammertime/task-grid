@@ -32,7 +32,6 @@ const App = () => {
 
   return (
     <div style={{ padding: 32 }}>
-      <h2>🧪 Task Grid</h2>
       <Grid
         columns={initialColumns}
         rows={rows}

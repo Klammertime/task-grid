@@ -1,0 +1,30 @@
+.grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-header,
+.grid-row {
+    display: flex;
+    /* align-items: center; */
+}
+
+.grid-cell {
+    padding: 8px 12px;
+    border: 1px solid #eee;
+    flex: 1;
+    overflow: hidden;
+}
+
+.header-cell {
+    font-weight: bold;
+}
+
+.checkbox-col {
+    width: 36px;
+    flex: none;
+}
+
+.grid-row.selected {
+    background: #f0f8ff;
+}

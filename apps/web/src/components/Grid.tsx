@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ColumnDef, RowData } from 'grid-core';
 import { fieldRegistry } from 'grid-core';
+import './Grid.css';
 
 interface GridProps {
     columns: ColumnDef[];
@@ -45,65 +46,66 @@ export const Grid = ({
     };
 
     return (
-        <table className="grid-table">
-            <thead>
-                <tr>
-                    {rowSelectionEnabled && <th></th>}
-                    {columns.map(col => (
-                        <th key={col.id}>{col.label}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
+        <div className="grid">
+            <div className="grid-header">
+                {rowSelectionEnabled && <div className="grid-cell checkbox-col"></div>}
+                {columns.map(col => (
+                    <div key={col.id} className="grid-cell header-cell">{col.label}</div>
+                ))}
+            </div>
+            <div className="grid-body">
                 {rows.map(row => {
                     const isSelected = selectedRowIds.has(row.id);
                     return (
-                        <tr
+                        <div
                             key={row.id}
-                            className={isSelected ? 'selected' : ''}
+                            className={`grid-row ${isSelected ? 'selected' : ''}`}
                             onClick={() => handleRowClick(row)}
                         >
                             {rowSelectionEnabled && (
-                                <td>
+                                <div className="grid-cell checkbox-col" onClick={e => e.stopPropagation()}>
                                     <input
                                         type="checkbox"
                                         checked={isSelected}
                                         onChange={() => handleRowClick(row)}
-                                        onClick={e => e.stopPropagation()}
                                     />
-                                </td>
+                                </div>
                             )}
-                            {columns.map(col => (
-                                <td key={col.id}>
-                                    {(() => {
-                                        const value = row.values[col.id];
-                                        const fieldConfig = fieldRegistry[col.fieldType] ?? {};
-                                        const renderEditor = col.renderEditor || fieldConfig.renderEditor;
-                                        const renderCell = col.renderCell || fieldConfig.renderCell;
+                            {columns.map(col => {
+                                const value = row.values[col.id];
+                                const fieldConfig = fieldRegistry[col.fieldType] ?? {};
+                                const renderEditor = col.renderEditor || fieldConfig.renderEditor;
+                                const renderCell = col.renderCell || fieldConfig.renderCell;
 
-                                        return renderEditor ? (
+                                return (
+                                    <div
+                                        key={col.id}
+                                        className="grid-cell"
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        {renderEditor ? (
                                             renderEditor({
                                                 value,
-                                                column: col,
                                                 row,
+                                                column: col,
                                                 onChange: newVal => handleCellChange(row.id, col.id, newVal),
-                                                onCancel: () => { },
+                                                onCancel: () => { }
                                             })
-
                                         ) : renderCell ? (
-                                            renderCell(value, row)
+                                            renderCell(value, row, col)
                                         ) : (
                                             String(value ?? '')
-                                        );
-                                    })()}
-                                </td>
-                            ))}
-                        </tr>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
                     );
                 })}
-            </tbody>
-        </table>
+            </div>
+        </div>
     );
+
 };
 
 export default Grid;
