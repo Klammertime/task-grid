@@ -1,45 +1,46 @@
-// apps/web/src/App.tsx
-import React from 'react';
-import './App.css';
-import { Grid } from './components/Grid';
+import React, { useState } from 'react';
+import Grid from './components/Grid';
 import type { ColumnDef, RowData } from 'grid-core';
 
-const columns: ColumnDef[] = [
-  {
-    id: 'name',
-    label: 'Task',
-  },
-  {
-    id: 'assignee',
-    label: 'Assignee',
-    renderCell: (value: string) => <strong>{value}</strong>,
-    renderEditor: ({ value, onChange }) => (
-      <input value={value} onChange={e => onChange(e.target.value)} />
-    )
-  }
+const initialColumns: ColumnDef[] = [
+  { id: 'id', label: 'ID', fieldType: 'text' },
+  { id: 'title', label: 'Title', fieldType: 'text' },
+  { id: 'assignee', label: 'Assignee', fieldType: 'user' },
 ];
 
 const initialRows: RowData[] = [
-  { id: '1', values: { name: 'Fix bug', assignee: 'Alice' } },
-  { id: '2', values: { name: 'Write docs', assignee: 'Bob' } },
-  { id: '3', values: { name: 'Test feature', assignee: 'Carol' } },
+  {
+    id: '1',
+    values: {
+      id: 'TK-001',
+      title: 'Fix dropdown bug',
+      assignee: ['kenny', 'gabrie'],
+    },
+  },
+  {
+    id: '2',
+    values: {
+      id: 'TK-002',
+      title: 'Design profile screen',
+      assignee: ['zico'],
+    },
+  },
 ];
 
-export default function App() {
-  const [rows, setRows] = React.useState<RowData[]>(initialRows);
-  const [selected, setSelected] = React.useState<RowData[]>([]);
+const App = () => {
+  const [rows, setRows] = useState(initialRows);
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>Data Grid</h1>
+    <div style={{ padding: 32 }}>
+      <h2>🧪 Task Grid</h2>
       <Grid
-        columns={columns}
+        columns={initialColumns}
         rows={rows}
         onChange={setRows}
         rowSelectionEnabled
-        onRowSelect={setSelected}
       />
-      <pre>{JSON.stringify(selected, null, 2)}</pre>
     </div>
   );
-}
+};
+
+export default App;
