@@ -42,8 +42,6 @@ This is a modular data grid system built with React and TypeScript. The goal was
 ## Getting Started
 
 ### 1. Install Dependencies
-
-```bash
 yarn install
 
 ### 2. Start the Dev Environment
