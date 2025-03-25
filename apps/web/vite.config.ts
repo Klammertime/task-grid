@@ -9,4 +9,10 @@ export default defineConfig({
       'grid-core': path.resolve(__dirname, '../../packages/grid-core/src'),
     },
   },
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:3001', // Route API requests to backend
+    },
+  },
 });

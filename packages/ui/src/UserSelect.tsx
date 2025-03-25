@@ -1,57 +1,67 @@
 import React, { useEffect, useState } from 'react';
+import './UserAvatar.css';
 
-type User = {
+interface User {
     id: string;
     name: string;
-    avatarUrl?: string;
-};
-
-interface UserSelectProps {
-    value: User[];
-    onChange: (newUsers: User[]) => void;
+    email: string;
+    avatarUrl: string;
 }
 
-const MOCK_USERS: User[] = [
-    { id: '1', name: 'Kenny Williams' },
-    { id: '2', name: 'Gabriel Lima' },
-    { id: '3', name: 'Akash Guru' },
-    { id: '4', name: 'Srinivas Gorur Shandilya' }
-];
+interface UserSelectProps {
+    value: string[]; // list of user IDs
+    onChange: (value: string[]) => void;
+    onCancel?: () => void;
+}
 
-const UserSelect: React.FC<UserSelectProps> = ({ value, onChange }) => {
-    const [query, setQuery] = useState('');
-    const [options, setOptions] = useState<User[]>(MOCK_USERS);
+const UserSelect: React.FC<UserSelectProps> = ({ value, onChange, onCancel }) => {
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const toggleUser = (user: User) => {
-        const exists = value.find(u => u.id === user.id);
-        if (exists) {
-            onChange(value.filter(u => u.id !== user.id));
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await fetch('/api/users');
+                if (!res.ok) throw new Error('Failed to fetch users');
+                const data = await res.json();
+                setUsers(data);
+            } catch (err: any) {
+                setError(err.message || 'Unknown error');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    const toggleUser = (id: string) => {
+        if (value.includes(id)) {
+            onChange(value.filter(v => v !== id));
         } else {
-            onChange([...value, user]);
+            onChange([...value, id]);
         }
     };
 
-    const filtered = options.filter(u => u.name.toLowerCase().includes(query.toLowerCase()));
+    if (loading) return <div>Loading users...</div>;
+    if (error) return <div className="error">Error: {error}</div>;
 
     return (
         <div className="user-select">
-            <input
-                placeholder="Search users..."
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-            />
-            <ul className="user-options">
-                {filtered.map(user => (
-                    <li key={user.id} onClick={() => toggleUser(user)}>
-                        <input
-                            type="checkbox"
-                            checked={!!value.find(u => u.id === user.id)}
-                            readOnly
-                        />
-                        {user.name}
-                    </li>
-                ))}
-            </ul>
+            {users.map(user => (
+                <div
+                    key={user.id}
+                    className={`user-option ${value.includes(user.id) ? 'selected' : ''}`}
+                    onClick={() => toggleUser(user.id)}
+                >
+                    <img src={user.avatarUrl} alt={user.name} />
+                    <span>{user.name}</span>
+                </div>
+            ))}
+            <div className="actions">
+                <button onClick={onCancel}>Cancel</button>
+            </div>
         </div>
     );
 };
